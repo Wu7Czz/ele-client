@@ -1,18 +1,30 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <van-button type="danger" @click="test1">危险按钮</van-button>
+    {{msg}}
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
-
+import { testApi } from '@/api/index.js'
 export default {
-  name: "home",
+  name: 'Home',
+  data() {
+    return {
+      msg: 0
+    }
+  },
   components: {
-    HelloWorld
+  },
+  mounted() {
+  },
+  methods: {
+    test1() {
+      this.msg++
+      testApi().then(resData => {
+        this.msg = resData.info
+      })
+    }
   }
-};
+}
 </script>

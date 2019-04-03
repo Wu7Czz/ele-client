@@ -26,6 +26,14 @@
           >eslint</a
         >
       </li>
+      <li>
+        <a
+          href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-unit-mocha"
+          target="_blank"
+          rel="noopener"
+          >unit-mocha</a
+        >
+      </li>
     </ul>
     <h3>Essential Links</h3>
     <ul>

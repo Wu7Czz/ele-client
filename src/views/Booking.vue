@@ -1,6 +1,6 @@
 <template>
   <div class="booking">
-    <mt-button type="primary">{{msg}}</mt-button>
+    <van-button type="default">默认按钮</van-button>
   </div>
 </template>
 

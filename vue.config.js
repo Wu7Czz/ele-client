@@ -1,3 +1,4 @@
+const isProduction = process.env.NODE_ENV === 'production'
 module.exports = {
   publicPath: process.env.NODE_ENV === 'production'
     ? 'www.wu7czz.com'
@@ -25,15 +26,18 @@ module.exports = {
   // corsUseCredentials: false,
   // webpack 配置，键值对象时会合并配置，为方法时会改写配置
   // https://cli.vuejs.org/guide/webpack.html#simple-configuration
-  configureWebpack: {
-    resolve: {
-      alias: {
-        'assets': '@/assets',
-        'components': '@/components',
-        'views': '@/views',
-        'styles': '@/styles'
-      }
-    }
+  configureWebpack: config => {
+    config.resolve.alias.assets = '@/assets'
+    config.resolve.alias.components = '@/components'
+    config.resolve.alias.views = '@/views'
+    config.resolve.alias.styles = '@/styles'
+
+    // if (isProduction) {
+    //   config.externals = {
+    //     'vue': 'Vue',
+    //     'vant': 'vant'
+    //   }
+    // }
   },
 
   // webpack 链接 API，用于生成和修改 webapck 配置

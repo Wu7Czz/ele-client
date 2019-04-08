@@ -1,30 +1,215 @@
 <template>
   <div class="home">
-    <van-button type="danger" @click="test1">危险按钮</van-button>
-    {{msg}}
+    <van-cell-group>
+      <van-field v-model="currentDate"/>
+    </van-cell-group>
+    <van-cell title="今日订餐人次" size="large" value-class="today_num_value" title-class="today_num_title">
+      <span>{{today_b}}</span>
+      /
+      <span>{{today_l}}</span>
+      /
+      <span>{{today_s}}</span>
+    </van-cell>
+    <van-row class="color-example">
+      <van-col span="6">早餐
+        <i :style="{background: colors.breakfast}"></i>
+      </van-col>
+      <van-col span="6">午餐
+        <i :style="{background: colors.lunch}"></i>
+      </van-col>
+      <van-col span="6">晚餐
+        <i :style="{background: colors.supper}"></i>
+      </van-col>
+      <van-col span="6">未订餐
+        <i :style="{background: colors.none}"></i>
+      </van-col>
+    </van-row>
+    <van-collapse v-model="showFloor">
+      <van-collapse-item title="一楼" name="1st">
+        <Tables :tables-data="tableData" :people-data="peopleData" :stage-width="stageWidth" table-id="1st" @load-cb="loadSeat"></Tables>
+      </van-collapse-item>
+      <van-collapse-item title="二楼" name="2nd">
+        <Tables :tables-data="tableData" :people-data="peopleData" :stage-width="stageWidth" table-id="2st" @load-cb="loadSeat"></Tables>
+      </van-collapse-item>
+    </van-collapse>
   </div>
 </template>
 
 <script>
-import { testApi } from '@/api/index.js'
+// import { testApi } from '@/api/index.js'
+import Tables from '@/components/Tables'
+import { mapGetters } from 'vuex'
+import { parseTime } from '@/utils'
 export default {
   name: 'Home',
   data() {
     return {
-      msg: 0
+      today_b: 0, // 今日早饭人次
+      today_l: 0, // 今日午饭人次
+      today_s: 0, // 今日晚饭人次
+      msg: 0,
+      showFloor: ['1st'],
+      currentDate: parseTime(new Date(), '{y}-{m}-{d}'),
+      stageWidth: window.innerWidth,
+      tableData: [
+        {
+          id: 'fad',
+          floor: 1,
+          order_num: 1,
+          shape: 'circle',
+          sum: 12
+        },
+        {
+          id: 'faffd',
+          floor: 1,
+          order_num: 2,
+          shape: 'circle',
+          sum: 13
+        },
+        {
+          id: 'afdsf',
+          floor: 1,
+          order_num: 3,
+          shape: 'circle',
+          sum: 6
+        },
+        {
+          id: 'gggw',
+          floor: 1,
+          order_num: 4,
+          shape: 'circle',
+          sum: 10
+        }
+      ],
+      peopleData: [
+        {
+          id: '1212313',
+          tableId: 'gggw',
+          name: '小白',
+          class: 12,
+          grade: 2021,
+          level: 'middle',
+          booking: [false, false, false]
+        },
+        {
+          id: '1212313',
+          tableId: 'gggw',
+          name: '小白',
+          class: 12,
+          grade: 2021,
+          level: 'middle',
+          booking: [true, true, true]
+        },
+        {
+          id: '1212313',
+          tableId: 'gggw',
+          name: '小白',
+          class: 12,
+          grade: 2021,
+          level: 'middle',
+          booking: [false, true, true]
+        },
+        {
+          tableId: 'gggw',
+          id: 'fadfadsf',
+          name: '小黑',
+          class: 2,
+          grade: 2019,
+          level: 'high',
+          booking: [true, true, false]
+        },
+        {
+          tableId: 'gggw',
+          id: 'fadfadsf',
+          name: '小黑',
+          class: 2,
+          grade: 2019,
+          level: 'high',
+          booking: [true, false, true]
+        }, {
+          tableId: 'gggw',
+          id: 'fadfadsf',
+          name: '小黑',
+          class: 2,
+          grade: 2019,
+          level: 'high',
+          booking: [false, true, false]
+        },
+        {
+          tableId: 'gggw',
+          id: 'fadfadsf',
+          name: '小黑',
+          class: 2,
+          grade: 2019,
+          level: 'high',
+          booking: [false, false, true]
+        },
+        {
+          tableId: 'gggw',
+          id: 'fadfadsf',
+          name: '小黑',
+          class: 2,
+          grade: 2019,
+          level: 'high',
+          booking: [true, false, false]
+        }
+      ]
     }
   },
   components: {
+    Tables
+  },
+  computed: {
+    ...mapGetters([
+      'colors'
+    ])
   },
   mounted() {
   },
   methods: {
-    test1() {
-      this.msg++
-      testApi().then(resData => {
-        this.msg = resData.info
-      })
+    loadSeat(event) {
+      console.log(event)
     }
   }
 }
 </script>
+<style lang="scss" scoped>
+
+.today_num_title{
+  font-size: 20px;
+}
+.today_num_value{
+  font-size: 18px;
+  span{
+    &:nth-child(1){
+      color: #FACB40;
+    }
+    &:nth-child(2){
+      color: #4073FD
+    }
+    &:nth-child(3){
+      color: #A453C2;
+    }
+  }
+  color: blue
+}
+.color-example{
+  font-size: 18px;
+  .van-col{
+    position: relative;
+    i{
+      display: inline-block;
+      vertical-align: sub;
+      width: 16px;
+      height: 20px;
+      border-radius: 4px;
+    }
+  }
+}
+</style>
+<style scoped>
+.home >>> .van-collapse-item__content{
+  padding: 0;
+}
+</style>
+

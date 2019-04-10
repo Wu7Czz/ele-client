@@ -5,8 +5,9 @@ import store from './store/index'
 import VueKonva from 'vue-konva'
 import axios from '@/utils/axios'
 import lodash from 'lodash'
-import { Button, NavBar, Tabbar, TabbarItem, Row, Col, Toast, Uploader, Icon, Collapse, CollapseItem, Cell, CellGroup, DatetimePicker, Field } from 'vant'
-Vue.use(Button).use(Tabbar).use(NavBar).use(TabbarItem).use(Row).use(Col).use(Toast).use(Uploader).use(Icon).use(Collapse).use(CollapseItem).use(Cell).use(CellGroup).use(DatetimePicker).use(Field)
+import '@/styles/index.scss'
+import { Button, NavBar, Tabbar, TabbarItem, Row, Col, Toast, Uploader, Icon, Collapse, CollapseItem, Cell, CellGroup, DatetimePicker, Picker, Field, Popup } from 'vant'
+Vue.use(Button).use(Tabbar).use(NavBar).use(TabbarItem).use(Row).use(Col).use(Toast).use(Uploader).use(Icon).use(Collapse).use(CollapseItem).use(Cell).use(CellGroup).use(DatetimePicker).use(Picker).use(Field).use(Popup)
 
 Vue.use(VueKonva)
 Vue.config.productionTip = false

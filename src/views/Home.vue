@@ -86,71 +86,63 @@ export default {
           id: '1212313',
           tableId: 'gggw',
           name: '小白',
-          class: 12,
-          grade: 2021,
-          level: 'middle',
+          class: '01班',
+          grade: 'g2021',
           booking: [false, false, false]
         },
         {
           id: '1212313',
           tableId: 'gggw',
           name: '小白',
-          class: 12,
-          grade: 2021,
-          level: 'middle',
+          class: '01班',
+          grade: 'g2021',
           booking: [true, true, true]
         },
         {
           id: '1212313',
           tableId: 'gggw',
           name: '小白',
-          class: 12,
-          grade: 2021,
-          level: 'middle',
+          class: '02班',
+          grade: 'g2021',
           booking: [false, true, true]
         },
         {
           tableId: 'gggw',
           id: 'fadfadsf',
           name: '小黑',
-          class: 2,
-          grade: 2019,
-          level: 'high',
+          class: '01班',
+          grade: 'g2020',
           booking: [true, true, false]
         },
         {
           tableId: 'gggw',
           id: 'fadfadsf',
           name: '小黑',
-          class: 2,
-          grade: 2019,
-          level: 'high',
+          class: '01班',
+          grade: 'g2020',
           booking: [true, false, true]
         }, {
           tableId: 'gggw',
           id: 'fadfadsf',
           name: '小黑',
-          class: 2,
-          grade: 2019,
-          level: 'high',
+          class: '02班',
+          grade: 'g2020',
           booking: [false, true, false]
         },
         {
           tableId: 'gggw',
           id: 'fadfadsf',
           name: '小黑',
-          class: 2,
-          grade: 2019,
-          level: 'high',
+          class: '01班',
+          grade: 'g2020',
           booking: [false, false, true]
         },
         {
           tableId: 'gggw',
           id: 'fadfadsf',
           name: '小黑',
-          class: 2,
-          grade: 2019,
-          level: 'high',
+          class: '01班',
+          grade: 'g2020',
           booking: [true, false, false]
         }
       ]
@@ -168,7 +160,7 @@ export default {
   },
   methods: {
     loadSeat(event) {
-      console.log(event)
+      // console.log(event)
     }
   }
 }

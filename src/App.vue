@@ -17,7 +17,7 @@ export default {
   },
   watch: {
     active(newVal, oldVal) {
-      if (newVal !== oldVal) {
+      if (newVal !== oldVal && this.$route.name !== this.pages[newVal].name) {
         this.$router.push(this.pages[newVal].url)
       }
     }
@@ -29,6 +29,7 @@ export default {
         {
           title: '首页',
           url: '/home',
+          name: 'home',
           icon: 'wap-home',
           info: '',
           dot: undefined
@@ -36,6 +37,7 @@ export default {
         {
           title: '订餐',
           url: '/booking',
+          name: 'booking',
           icon: 'records',
           info: '',
           dot: undefined
@@ -43,6 +45,7 @@ export default {
         {
           title: '报表',
           url: '/statement',
+          name: 'statement',
           icon: 'chart-trending-o',
           info: '',
           dot: undefined
@@ -50,6 +53,7 @@ export default {
         {
           title: '我的',
           url: '/my',
+          name: 'my',
           icon: 'contact',
           info: '',
           dot: undefined
@@ -58,13 +62,22 @@ export default {
     }
   },
   mounted() {
+    var i = 0
+    this.pages.some((page, index) => {
+      if (page.name === this.$route.name) {
+        i = index
+        return true
+      } else {
+        return false
+      }
+    })
+    this.active = i
   },
   beforeDestroy() {
 
   },
   methods: {
     change(active) {
-      console.log(active)
       this.title = active
     }
   }
@@ -77,6 +90,7 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  padding-top: 50px;
   padding-bottom: 50px;
 }
 #nav {

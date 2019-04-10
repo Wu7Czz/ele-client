@@ -166,7 +166,6 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-
 .today_num_title{
   font-size: 20px;
 }
@@ -186,6 +185,7 @@ export default {
   color: blue
 }
 .color-example{
+  text-align: center;
   font-size: 18px;
   .van-col{
     position: relative;

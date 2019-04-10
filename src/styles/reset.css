@@ -24,6 +24,7 @@ footer, header, hgroup, menu, nav, section {
 }
 body {
 	line-height: 1;
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0)
 }
 ol, ul {
 	list-style: none;
@@ -43,4 +44,6 @@ table {
 .van-popup--right{
 	width: calc(100% - 20px);
 	height: 100%;
+}
+.van-cell__title.van-field__label{
 }

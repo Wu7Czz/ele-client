@@ -83,7 +83,7 @@ const app = {
           'gradeId': 'g2021',
           'gradeName': '高2021级'
         }, {
-          'classId': 'fad121sf',
+          'classId': 'fad121sf11',
           'className': '02班',
           'gradeId': 'g2021',
           'gradeName': '高2021级'

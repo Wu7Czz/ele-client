@@ -6,28 +6,30 @@
         readonly
         label="姓名"
       >
-        <van-button slot="button" size="small" type="primary" @click="select">选择</van-button>
+        <van-button slot="button" size="small" type="info" round @click="selectStudent">选择</van-button>
       </van-field>
-    </van-cell-group>
-    <van-popup v-model="showList" position="bottom">
-      <StudentPicker
-        :studentsColumns="studentsColumns"
-        :isOpen="showList"
-        @cancel="onListCancel"
-        @confirm="onListConfirm"
+      <van-field
+        :value="baseInfo.gradeName"
+        label="年级"
       />
-    </van-popup>
-    <van-popup v-model="showAdd" position="right">
-      <AddPeople
-        @close="addClose"
+      <van-field
+        :value="baseInfo.className"
+        label="班级"
+      />
+    </van-cell-group>
+    <van-popup v-model="showSelect" position="bottom">
+      <StudentPicker
+        :isOpen="showSelect"
+        @cancel="onSelectCancel"
+        @confirm="onSelectConfirm"
       />
     </van-popup>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import StudentPicker from '@/components/StudentPiker'
-import AddPeople from '@/components/AddPeople'
 export default {
   name: 'Booking',
   data() {
@@ -35,33 +37,29 @@ export default {
       baseInfo: {
       },
       showAdd: false,
-      showList: false,
-      studentsColumns: [
-      ]
+      showSelect: false
     }
   },
   components: {
-    AddPeople,
     StudentPicker
   },
   computed: {
-
+    ...mapGetters([
+      'gradeData',
+      'classData',
+      'studentData'
+    ])
   },
   methods: {
-    select() {
-      this.showList = true
+    selectStudent() {
+      this.showSelect = true
     },
-    onListCancel() {
-      this.showList = false
+    onSelectCancel() {
+      this.showSelect = false
     },
-    onListConfirm(val) {
-      this.showList = false
-      val ? this.baseInfo.name = val.name : ''
-    },
-    // 添加人员 关闭
-    addClose(val) {
-      this.showAdd = false
-      console.log(val)
+    onSelectConfirm(val) {
+      this.showSelect = false
+      val ? this.baseInfo = val : ''
     }
   },
   mounted() {
@@ -69,7 +67,14 @@ export default {
   }
 }
 </script>
-<style lang="sass" scoped>
-
+<style lang="scss" scoped>
+.van-button + .van-button {
+  margin-left: 10px;
+}
+</style>
+<style scoped>
+.booking >>> .van-cell__title.van-field__label {
+  line-height: 30px;
+}
 </style>
 

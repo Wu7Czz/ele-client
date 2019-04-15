@@ -332,19 +332,18 @@ export function getBetweenDateStr(startTime, endTime) {
   return date_all
 }
 export function getBetweenDateStrAddAttr(startTime, endTime, attr) {
-  var date_all = {}; var i = 0
+  var date_all = {}
   while ((endTime.getTime() - startTime.getTime()) >= 0) {
     var year = startTime.getFullYear()
     var month = (startTime.getMonth() + 1).toString().length === 1 ? '0' + (startTime.getMonth() + 1).toString() : (startTime.getMonth() + 1).toString()
     var day = startTime.getDate().toString().length === 1 ? '0' + startTime.getDate() : startTime.getDate()
     date_all[year + '-' + month + '-' + day] = { ...attr }
     startTime.setDate(startTime.getDate() + 1)
-    i += 1
   }
   return date_all
 }
 export function getBetweenDateStrExWeekend(startTime, endTime, inclSat, inclSun) {
-  var date_all = {}; var i = 0
+  var date_all = {}
   while ((endTime.getTime() - startTime.getTime()) >= 0) {
     var year = startTime.getFullYear()
     var month = (startTime.getMonth() + 1).toString().length === 1 ? '0' + (startTime.getMonth() + 1).toString() : (startTime.getMonth() + 1).toString()
@@ -360,7 +359,6 @@ export function getBetweenDateStrExWeekend(startTime, endTime, inclSat, inclSun)
       date_all[year + '-' + month + '-' + day] = { priority: 'default' }
     }
     startTime.setDate(startTime.getDate() + 1)
-    i += 1
   }
   return date_all
 }

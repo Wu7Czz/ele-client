@@ -7,8 +7,8 @@
               <v-date-picker
                 mode='range'
                 :min-date='minDate'
+                :disabled-dates="new Date()"
                 v-model='dateRange'
-                is-required
                 >
               </v-date-picker>
           </van-cell>
@@ -109,7 +109,36 @@
           </van-cell>
         </van-cell-group>
       </van-tab>
-      <van-tab title="步骤2" :disabled="!stepOneData">内容 2</van-tab>
+      <van-tab title="步骤2" :disabled="!stepOneData">
+        <van-row class="meal-choose">
+          <van-col span="6">
+            <van-switch-cell v-model="choseMeal[0]" title="早餐" :active-color="colors.breakfast"/>
+          </van-col>
+          <van-col span="6">
+            <van-switch-cell v-model="choseMeal[1]" title="午餐" :active-color="colors.lunch"/>
+          </van-col>
+          <van-col span="6">
+            <van-switch-cell v-model="choseMeal[2]" title="晚餐" :active-color="colors.supper"/>
+          </van-col>
+          <van-col span="6">
+            <van-switch-cell v-model="cancelMeal" title="未订餐" active-color="#777"/>
+          </van-col>
+        </van-row>
+        <van-row type="flex" justify="space-between" class="calendar">
+          <van-col span="24">
+            <v-calendar
+              @dayclick="dayclick"
+              :attributes='attrbutes'
+            />
+          </van-col>
+        </van-row>
+        <van-cell-group>
+          <van-cell title="早餐" :label="'次数：'+ breakfastDates.length"  :value="breakfastDates.length * baseMeal[0] + '元'" v-if="breakfastDates.length"/>
+          <van-cell title="午餐" :label="'次数：'+ lunchDates.length"  :value="lunchDates.length * baseMeal[1] + '元'" v-if="lunchDates.length"/>
+          <van-cell title="晚餐" :label="'次数：'+ supperDates.length"  :value="supperDates.length * baseMeal[2] + '元'" v-if="supperDates.length"/>
+          <van-cell title="总价" :label="'总就餐天数：'+ mealDates.length"  :value="totalPrice + '元'"/>
+        </van-cell-group>
+      </van-tab>
     </van-tabs>
   </div>
 </template>
@@ -165,51 +194,48 @@ export default {
       inclSat: true,
       stepOneData: null,
       stepTwoData: null,
-      // 日历显示数据
-      attributes: [
-        {
-          dot: {
-            color: 'red',
-            class: 'my-dot-class'
-          },
-          dates: [
-            new Date(2019, 3, 1), // Jan 1st
-            new Date(2019, 3, 10), // Jan 10th
-            new Date(2019, 3, 22) // Jan 22nd
-          ]
-        },
-        {
-          dot: 'green',
-          dates: [
-            new Date(2019, 3, 4), // Jan 4th
-            new Date(2019, 3, 10), // Jan 10th
-            new Date(2019, 3, 15) // Jan 15th
-          ]
-        },
-        {
-          dot: 'purple',
-          dates: [
-            new Date(2019, 3, 12), // Jan 12th
-            new Date(2019, 3, 26), // Jan 26th
-            new Date(2019, 3, 15) // Jan 15th
-          ]
-        },
-        {
-          dot: 'blue',
-          dates: [
-            new Date(2019, 3, 10), // Jan 12th
-            new Date(2019, 3, 26), // Jan 26th
-            new Date(2019, 3, 15) // Jan 15th
-          ]
-        }
-      ]
+      breakfastDates: [],
+      lunchDates: [],
+      supperDates: [],
+      mealDates: [],
+      choseMeal: [true, true, true],
+      cancelMeal: false
     }
   },
   computed: {
     ...mapGetters([
       'holidays',
-      'workdays'
-    ])
+      'workdays',
+      'colors'
+    ]),
+    attrbutes() {
+      return [
+        {
+          bar: {
+            backgroundColor: this.colors['breakfast'],
+            className: 'breakfast'
+          },
+          dates: this.breakfastDates.map(i => new Date(i))
+        },
+        {
+          bar: {
+            backgroundColor: this.colors['lunch'],
+            className: 'lunch'
+          },
+          dates: this.lunchDates.map(i => new Date(i))
+        },
+        {
+          bar: {
+            backgroundColor: this.colors['supper'],
+            className: 'supper'
+          },
+          dates: this.supperDates.map(i => new Date(i))
+        }
+      ]
+    },
+    totalPrice() {
+      return this.breakfastDates.length * this.baseMeal[0] + this.lunchDates.length * this.baseMeal[1] + this.supperDates.length * this.baseMeal[2]
+    }
   },
   components: {},
   watch: {
@@ -272,6 +298,22 @@ export default {
     // 是否包含星期六
     inclSat() {
       this.stepOneData = null
+    },
+    choseMeal: {
+      handler(val) {
+        this.cancelMeal = !val.some(i => i)
+      },
+      immediate: true,
+      deep: true
+    },
+    cancelMeal(val) {
+      if (!val) {
+        if (!this.choseMeal.some(i => i)) {
+          this.choseMeal = [true, true, true]
+        }
+      } else {
+        this.choseMeal = [false, false, false]
+      }
     }
   },
   methods: {
@@ -351,6 +393,8 @@ export default {
           days,
           meals: this.baseMeal
         }
+        this.handleCalendarData(this.stepOneData)
+        this.choseMeal = this.baseMeal.map(i => !!i)
       }
     },
     getMealDate(defaultDays, showWorkdays, showHolidays, range) {
@@ -399,7 +443,8 @@ export default {
       return newArray
     },
     onClickDisabled(index) {
-      if (index === 1) {
+      // 第一步跳到第二步
+      if (this.active === 0 && index === 1) {
         if (!this.studentInfo.name) {
           this.$toast('尚未选择就餐人员')
         } else if (!this.dateRange) {
@@ -414,7 +459,7 @@ export default {
     changeStep(index) {
       if (this.active === 0) {
         this.getStepOneData()
-        if (this.stepOneData) {
+        if (this.stepOneData && index === 1) {
           this.$nextTick(() => {
             this.active = index
           })
@@ -424,9 +469,55 @@ export default {
       } else if (this.active === 1) {
         if (index === 0) {
           this.active = 0
-          this.stepTwoData = null
+          this.stepTwoClear()
         }
       }
+    },
+    handleCalendarData(baseData) {
+      const days = baseData.days
+      const meals = baseData.meals
+      this._.forEach(meals, (price, index) => {
+        if (price) {
+          if (index === 0) {
+            this.breakfastDates = days.map(i => i)
+          } else if (index === 1) {
+            this.lunchDates = days.map(i => i)
+          } else if (index === 2) {
+            this.supperDates = days.map(i => i)
+          }
+        }
+      })
+      this.getMealDates()
+    },
+    dayclick(day) {
+      this.handleDayClick(day, 0, 'breakfast')
+      this.handleDayClick(day, 1, 'lunch')
+      this.handleDayClick(day, 2, 'supper')
+      this.getMealDates()
+    },
+    handleDayClick(day, index, mealName) {
+      const choose = this.choseMeal[index]
+      const chose = day.attributesMap[index]
+      const now = parseTime(day.date, '{y}-{m}-{d}')
+      if (!choose && chose) {
+        this[mealName + 'Dates'] = this[mealName + 'Dates'].filter(i => now !== i)
+      } else if (choose && !chose) {
+        this[mealName + 'Dates'].push(now)
+      }
+    },
+    getMealDates() {
+      const arr = [...this.breakfastDates, ...this.lunchDates, ...this.supperDates]
+      this.$nextTick(() => {
+        this.mealDates = [...new Set(arr)]
+      })
+    },
+    stepTwoClear() {
+      this.breakfastDates = []
+      this.lunchDates = []
+      this.supperDates = []
+      this.mealDates = []
+      this.choseMeal = this.baseMeal.map(i => !!i)
+      this.cancelMeal = false
     }
   },
   created() {
@@ -482,7 +573,7 @@ export default {
 }
 .bespeak-meal-add .start-end-date >>> .vc-popover-content-wrapper{
   width: 100% !important;
-  transform: translate3d( -120px, 35px, 0) !important;
+  /* transform: translate3d( -120px, 35px, 0) !important; */
 }
 .bespeak-meal-add .start-end-date >>> .popover-container input{
   min-width: 180px !important;
@@ -492,6 +583,17 @@ export default {
 }
 .workday-holiday >>> .van-collapse-item__content{
   padding: 0 15px;
+}
+.calendar >>> .van-col{
+  text-align: center;
+}
+.meal-choose >>> .van-cell > .van-cell__title{
+  text-align: right;
+  padding-right: 20px;
+  display: inline-block;
+}
+.meal-choose >>> .van-cell .van-cell__value{
+  display: inherit;
 }
 </style>
 

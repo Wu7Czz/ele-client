@@ -41,9 +41,10 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
-.van-popup--right{
-	width: calc(100% - 20px);
+html, body{
 	height: 100%;
 }
-.van-cell__title.van-field__label{
+.van-popup--right{
+	height: 100%;
+	width: 100%;
 }

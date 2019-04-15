@@ -3,7 +3,7 @@
     <van-nav-bar
       title="添加"
       left-text="返回"
-      right-text="完成"
+      right-text="保存"
       left-arrow
       @click-left="onClickLeft"
       @click-right="onClickRight"
@@ -17,19 +17,21 @@
       <van-field
         :value="baseInfo.gradeName"
         label="年级"
+        @click="showSelect"
         readonly
       >
-      <van-button slot="button" size="small" type="info" round @click="showSelect">选择</van-button>
       </van-field>
       <van-field
         :value="baseInfo.className"
         label="班级"
+        @click="showSelect"
         readonly
       />
     </van-cell-group>
-    <van-popup v-model="showList" position="bottom" :overlay="false">
+    <van-popup v-model="showList" position="bottom" :close-on-click-overlay="false">
       <ClassTreeSelect
-        @select="onSelectConfirm"
+        @confirm="onSelectConfirm"
+        @cancel="onSelectCancel"
       />
     </van-popup>
   </div>
@@ -63,6 +65,7 @@ export default {
       this.$emit('cancel')
     },
     onClickRight() {
+      // 待加入后台接口
       this.$emit('confirm')
     },
     showSelect() {
@@ -76,6 +79,9 @@ export default {
         ...val
       }
       console.log()
+    },
+    onSelectCancel() {
+      this.showList = false
     }
 
   },

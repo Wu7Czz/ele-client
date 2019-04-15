@@ -1,5 +1,11 @@
 <template>
   <div class="class-tree-select">
+    <van-nav-bar
+      title="选择班级"
+      left-text="返回"
+      left-arrow
+      @click-left="onClickLeft"
+    />
     <van-tree-select
       :items="items"
       :main-active-index="gradeIndex"
@@ -57,7 +63,10 @@ export default {
     },
     onClassClick(data) {
       this.classId = data.id
-      this.$emit('select', data.data)
+      this.$emit('confirm', data.data)
+    },
+    onClickLeft() {
+      this.$emit('cancel')
     }
   },
   created() {

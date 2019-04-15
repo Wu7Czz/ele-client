@@ -297,3 +297,70 @@ export function deepClone(source) {
 export function uniqueArr(arr) {
   return Array.from(new Set(arr))
 }
+
+export function addDays(oldDate, days) {
+  if (days === undefined || days === '') {
+    days = 1
+  }
+  const date = new Date(oldDate)
+  date.setDate(date.getDate() + days)
+  return date
+}
+
+export function getFormatDate(arg) {
+  if (arg === undefined || arg === '') {
+    return ''
+  }
+  var re = arg + ''
+  if (re.length < 2) {
+    re = '0' + re
+  }
+
+  return re
+}
+
+export function getBetweenDateStr(startTime, endTime) {
+  var date_all = []; var i = 0
+  while ((endTime.getTime() - startTime.getTime()) >= 0) {
+    var year = startTime.getFullYear()
+    var month = (startTime.getMonth() + 1).toString().length === 1 ? '0' + (startTime.getMonth() + 1).toString() : (startTime.getMonth() + 1).toString()
+    var day = startTime.getDate().toString().length === 1 ? '0' + startTime.getDate() : startTime.getDate()
+    date_all[i] = year + '-' + month + '-' + day
+    startTime.setDate(startTime.getDate() + 1)
+    i += 1
+  }
+  return date_all
+}
+export function getBetweenDateStrAddAttr(startTime, endTime, attr) {
+  var date_all = {}; var i = 0
+  while ((endTime.getTime() - startTime.getTime()) >= 0) {
+    var year = startTime.getFullYear()
+    var month = (startTime.getMonth() + 1).toString().length === 1 ? '0' + (startTime.getMonth() + 1).toString() : (startTime.getMonth() + 1).toString()
+    var day = startTime.getDate().toString().length === 1 ? '0' + startTime.getDate() : startTime.getDate()
+    date_all[year + '-' + month + '-' + day] = { ...attr }
+    startTime.setDate(startTime.getDate() + 1)
+    i += 1
+  }
+  return date_all
+}
+export function getBetweenDateStrExWeekend(startTime, endTime, inclSat, inclSun) {
+  var date_all = {}; var i = 0
+  while ((endTime.getTime() - startTime.getTime()) >= 0) {
+    var year = startTime.getFullYear()
+    var month = (startTime.getMonth() + 1).toString().length === 1 ? '0' + (startTime.getMonth() + 1).toString() : (startTime.getMonth() + 1).toString()
+    var day = startTime.getDate().toString().length === 1 ? '0' + startTime.getDate() : startTime.getDate()
+    var weekend = new Date(year + '-' + month + '-' + day).getDay()
+    if (inclSat && inclSun) {
+      date_all[year + '-' + month + '-' + day] = { priority: 'default' }
+    } else if (!inclSat && inclSun && weekend !== 6) {
+      date_all[year + '-' + month + '-' + day] = { priority: 'default' }
+    } else if (!inclSun && inclSat && weekend !== 0) {
+      date_all[year + '-' + month + '-' + day] = { priority: 'default' }
+    } else if (!inclSat && !inclSun && weekend !== 6 && weekend !== 0) {
+      date_all[year + '-' + month + '-' + day] = { priority: 'default' }
+    }
+    startTime.setDate(startTime.getDate() + 1)
+    i += 1
+  }
+  return date_all
+}

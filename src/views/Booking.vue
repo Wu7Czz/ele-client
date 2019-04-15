@@ -2,21 +2,23 @@
   <div class="booking">
     <van-cell-group>
       <van-field
-        v-model="baseInfo.name"
+        v-model="studentInfo.name"
         readonly
         label="姓名"
       >
         <van-button slot="button" size="small" type="info" round @click="selectStudent">选择</van-button>
       </van-field>
       <van-field
-        :value="baseInfo.gradeName"
-        label="年级"
-      />
-      <van-field
-        :value="baseInfo.className"
+        :value="studentInfo.gradeName + '-' +studentInfo.className"
         label="班级"
       />
     </van-cell-group>
+    <BespeakMeal
+    class="bespealk-meal"
+      :student-info="studentInfo"
+      @cancel="onBespeakCancel"
+      @confirm="onBespeakConfirm"
+    />
     <van-popup v-model="showSelect" position="bottom">
       <StudentPicker
         :isOpen="showSelect"
@@ -29,19 +31,24 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import StudentPicker from '@/components/StudentPiker'
+import StudentPicker from '@/components/StudentPicker'
+import BespeakMeal from '@/components/BespeakMeal'
 export default {
   name: 'Booking',
   data() {
     return {
-      baseInfo: {
+      studentInfo: {
+        name: '',
+        gradeName: '',
+        className: ''
       },
       showAdd: false,
       showSelect: false
     }
   },
   components: {
-    StudentPicker
+    StudentPicker,
+    BespeakMeal
   },
   computed: {
     ...mapGetters([
@@ -59,7 +66,11 @@ export default {
     },
     onSelectConfirm(val) {
       this.showSelect = false
-      val ? this.baseInfo = val : ''
+      val ? this.studentInfo = val : ''
+    },
+    onBespeakCancel() {
+    },
+    onBespeakConfirm(val) {
     }
   },
   mounted() {
@@ -68,6 +79,14 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.booking{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  .bespealk-meal{
+    flex:1;
+  }
+}
 .van-button + .van-button {
   margin-left: 10px;
 }

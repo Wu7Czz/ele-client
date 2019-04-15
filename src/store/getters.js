@@ -14,6 +14,8 @@ const getters = {
   colors: state => state.app.colors,
   gradeData: state => state.app.gradeData,
   classData: state => state.app.classData,
-  studentData: state => state.app.studentData
+  studentData: state => state.app.studentData,
+  holidays: state => state.app.holidays,
+  workdays: state => state.app.workdays
 }
 export default getters

@@ -1,6 +1,6 @@
 <template>
   <div class="tables">
-    <div :id="tableId"></div>
+    <div :id="canvasId"></div>
   </div>
 </template>
 
@@ -10,10 +10,6 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'Table',
   props: {
-    tableId: {
-      type: String,
-      default: 'table-' + (new Date()).getTime()
-    },
     stageWidth: {
       type: Number,
       default: 400
@@ -29,12 +25,24 @@ export default {
       default() {
         return []
       }
+    },
+    chooseType: {
+      type: String,
+      default: ''
+    },
+    choseSeats: {
+      type: Array,
+      default() {
+        return []
+      }
     }
   },
   data() {
     return {
+      canvasId: 'table-' + (new Date()).getTime(),
       tableGroup: new Konva.Group(),
       peopleGroup: new Konva.Group(),
+      seatGroup: new Konva.Group(),
       // 画布高度
       stageHeight: 400,
       // 画布
@@ -59,6 +67,10 @@ export default {
         fill: '#eee',
         stroke: '#7996FF',
         strokeWidth: 4
+      },
+      seatColors: {
+        'void': '#DCF2FF',
+        'chose': '#f44'
       }
     }
   },
@@ -108,16 +120,46 @@ export default {
         return [tablePos[0], tablePos[1] + R]
       }
     },
-    drawVoidSeat(pos) {
+    drawVoidSeat(pos, tableData) {
       const voidSeat = new Konva.Circle({
         x: pos[0],
         y: pos[1],
+        _type: 'void',
+        _tableData: tableData,
         radius: this.tableBaseSize * 3 / 48,
-        fill: '#DCF2FF',
+        fill: this.seatColors.void,
         stroke: 'rgb(146, 195, 218)',
         strokeWidth: 2
       })
-      this.tableGroup.add(voidSeat)
+      this.seatGroup.add(voidSeat)
+    },
+    drawChoseSeat(pos, tableData) {
+      const voidSeat = new Konva.Circle({
+        x: pos[0],
+        y: pos[1],
+        _type: 'void',
+        _tableData: tableData,
+        radius: this.tableBaseSize * 3 / 48,
+        fill: this.seatColors.chose,
+        stroke: 'rgb(146, 195, 218)',
+        strokeWidth: 2
+      })
+      this.seatGroup.add(voidSeat)
+    },
+    drawDisabledSeat(pos, tableData) {
+      const disabledSeat = new Konva.Circle({
+        x: pos[0],
+        y: pos[1],
+        _tableData: tableData,
+        _type: 'disabled',
+        radius: this.tableBaseSize * 3 / 48,
+        stroke: '#333',
+        strokeWidth: 2,
+        fillLinearGradientStartPoint: { x: 60, y: 40 },
+        fillLinearGradientEndPoint: { x: -60, y: -40 },
+        fillLinearGradientColorStops: [0, '#fff', 0.47, '#fff', 0.47, '#333', 0.53, '#333', 0.53, '#fff', 1, '#fff']
+      })
+      this.seatGroup.add(disabledSeat)
     },
     addTable(table, layer) {
 
@@ -125,7 +167,7 @@ export default {
     drawTable() {
       !this.tableBaseSize ? this.getStageSize() : ''
       this.stage = new Konva.Stage({
-        container: this.tableId,
+        container: this.canvasId,
         width: this.stageWidth,
         height: this.stageHeight
       })
@@ -162,15 +204,44 @@ export default {
           tableText.offsetX(tableText.width() / 2)
           tableText.offsetY(tableText.height() / 2)
           this.tableGroup.add(tableText)
+          const disabledNum = Math.min((table.choseNum || 0), table.sum)
+          const chooseType = this.chooseType
+          var choseNum = 0
+          if (this.choseSeats.length > 0) {
+            if (chooseType === 'single') {
+              if (this.choseSeats[0] === table.id) {
+                choseNum = 1
+              }
+            } else {
+              this.choseSeats.map(item => {
+                item === table.id && choseNum++
+              })
+            }
+            choseNum = Math.min(table.sum - disabledNum, choseNum)
+          }
           while (seatsSum > 0) {
             const seatPos = this.getSeatPos(seatsSum, table.sum, tablePos)
             this.positions[table.id]['seatsPos'].push(seatPos)
-            this.drawVoidSeat(seatPos)
+            if (chooseType) {
+              if ((seatsSum - disabledNum) <= 0) {
+                this.drawDisabledSeat(seatPos, table)
+              } else {
+                if (choseNum) {
+                  this.drawChoseSeat(seatPos, table)
+                  choseNum--
+                } else {
+                  this.drawVoidSeat(seatPos, table)
+                }
+              }
+            } else {
+              this.drawVoidSeat(seatPos, table)
+            }
             seatsSum--
           }
         } else {
 
         }
+        this.layer.add(this.seatGroup)
         this.layer.add(this.tableGroup)
       })
 
@@ -229,7 +300,6 @@ export default {
       }
       this.layer.add(this.peopleGroup)
       this.layer.draw()
-      this.$emit('load-cb', people)
     },
     drawPeople(one) {
       if (!one) return false
@@ -249,13 +319,55 @@ export default {
       })
       this.peopleGroup.add(peopleSeat)
       this.positions[tableId]['count']--
+    },
+    singleClick(evt) {
+      var shape = evt.target
+      if (shape.attrs._type !== 'void') return false
+      var group = evt.currentTarget
+      group.children && group.children.map((item) => {
+        item.attrs._type === 'void' && item.fill(this.seatColors.void)
+      })
+      shape.fill(this.seatColors.chose)
+      group.draw()
+      const choseTableIds = []
+      choseTableIds.push(shape.attrs._tableData.id)
+      this.$emit('change', choseTableIds)
+    },
+    multipleClick(evt) {
+      var shape = evt.target
+      if (shape.attrs._type !== 'void') return false
+      var group = evt.currentTarget
+      const fill = shape.attrs.fill === this.seatColors.chose ? this.seatColors.void : this.seatColors.chose
+      shape.fill(fill)
+      const choseTableIds = []
+      group.children && group.children.map((item) => {
+        item.attrs._type === 'void' && item.fill(this.seatColors.void)
+        if (item.attrs._type === 'void' && item.fill === this.seatColors.chose) {
+          choseTableIds.push(item.attrs._tableData.id)
+        }
+      })
+      group.draw()
+      this.$emit('change', choseTableIds)
+    },
+    clearChoseSeat() {
+      this.seatGroup.children && this.seatGroup.children.map((item) => {
+        item.attrs._type === 'void' && item.fill(this.seatColors.void)
+      })
+      this.seatGroup.draw()
     }
   },
   created() {
   },
   mounted() {
     this.drawTable()
-    this.updatePeople(this.peopleData)
+    if (this.chooseType === 'single') { // 单选状态下 给voidseat加载选中选中事件
+      this.layer.on('click', 'Group', this.singleClick)
+    } else if (this.chooseType === 'multiple') { // 多选状态下 给voidseat加载选中选中事件
+      this.layer.on('click', 'Group', this.multipleClick)
+    } else if (!this.chooseType) { // 在非选择状态下，才绘制人员圈圈
+      this.updatePeople(this.peopleData)
+    }
+    this.$emit('load-cb', true)
   }
 }
 </script>

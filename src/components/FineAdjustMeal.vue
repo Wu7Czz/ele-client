@@ -30,6 +30,9 @@
       <van-cell title="晚餐" value-class="meal-price" :label="'次数：'+ supperDates.length"  :value="supperDates.length * baseMeal[2] + '元'" v-if="supperDates.length"/>
       <van-cell title="总价" value-class="total-price" :label="'总就餐天数：'+ mealDates.length"  :value="totalPrice + '元'"/>
     </van-cell-group>
+    <van-cell class="button-cell">
+        <van-button type="info" @click="next()">下一步</van-button>
+    </van-cell>
   </div>
 </template>
 <script>
@@ -174,6 +177,16 @@ export default {
         this.seatsDates = [...new Set(arr1)]
         this.mealDates = [...new Set(arr)]
       })
+    },
+    next() {
+      this.$dialog.confirm({
+        title: '共计' + this.totalPrice + '元！',
+        message: `早${this.breakfastDates.length}次，午${this.lunchDates.length}次，晚${this.supperDates.length}次`
+      }).then(() => {
+        this.$emit('next', this.seatsDates)
+      }).catch(() => {
+        // on cancel
+      })
     }
   },
   created() {
@@ -206,5 +219,8 @@ export default {
 }
 .meal-choose >>> .van-cell .van-cell__value{
   display: inherit;
+}
+.button-cell >>> .van-cell__value{
+  text-align: right;
 }
 </style>

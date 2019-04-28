@@ -57,7 +57,8 @@ export default {
           floor: 1,
           order_num: 1,
           shape: 'circle',
-          sum: 12
+          sum: 12,
+          choseNum: 3
         },
         {
           id: 'faffd',

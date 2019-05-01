@@ -198,7 +198,7 @@ export default {
             x: tablePos[0],
             y: tablePos[1],
             fontSize: 18,
-            text: table.order_num,
+            text: table.floor + '-' + table.order_num,
             fill: 'green'
           })
           tableText.offsetX(tableText.width() / 2)

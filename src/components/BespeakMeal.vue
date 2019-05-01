@@ -22,8 +22,8 @@
 </template>
 
 <script>
-import BespeakMealAdd from '@/components/BespeakMealAdd'
-import BespeakMealChange from '@/components/BespeakMealChange'
+const BespeakMealAdd = () => import('@/components/BespeakMealAdd')
+const BespeakMealChange = () => import('@/components/BespeakMealChange')
 import { mapGetters } from 'vuex'
 export default {
   name: 'BespeakMeal',

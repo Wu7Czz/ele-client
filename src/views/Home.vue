@@ -37,7 +37,8 @@
 
 <script>
 // import { testApi } from '@/api/index.js'
-import Tables from '@/components/Tables'
+const Tables = () => import('@/components/Tables')
+// import Tables from '@/components/Tables'
 import { mapGetters } from 'vuex'
 import { parseTime } from '@/utils'
 export default {

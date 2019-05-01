@@ -16,6 +16,10 @@ export default {
   components: {
   },
   watch: {
+    $route(to, from) {
+      const index = this._.findIndex(this.pages, { 'name': to.name })
+      this.active = index !== this.active ? index : this.active
+    },
     active(newVal, oldVal) {
       if (newVal !== oldVal && this.$route.name !== this.pages[newVal].name) {
         this.$router.push(this.pages[newVal].url)

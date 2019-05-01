@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import Home from './views/Home.vue'
-import Booking from './views/Booking.vue'
-import My from './views/My.vue'
+const Home = () => import('./views/Home.vue')
+const Booking = () => import('./views/Booking.vue')
+const My = () => import('./views/My.vue')
 
 Vue.use(Router)
 

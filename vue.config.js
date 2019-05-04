@@ -31,7 +31,11 @@ module.exports = {
     config.resolve.alias.components = '@/components'
     config.resolve.alias.views = '@/views'
     config.resolve.alias.styles = '@/styles'
-
+    config.optimization = {
+      splitChunks: {
+        chunks: 'all'
+      }
+    }
     // if (isProduction) {
     //   config.externals = {
     //     'vue': 'Vue',

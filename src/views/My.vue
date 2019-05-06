@@ -1,12 +1,14 @@
 <template>
   <div class="my">
     <van-cell title="添加学生" left is-link @click="showAddStudent"/>
-    <van-popup v-model="addStudent" position="right">
+    <van-popup v-model="addStudent" position="right" v-if="addStudent">
       <AddStudent
         @cancel="onAddStudentCancel"
         @confirm="onAddStudentConfirm"
       />
     </van-popup>
+    <router-link to="/my/unitm">Go to Foo</router-link>
+    <router-view class="router-view"></router-view>
   </div>
 </template>
 
@@ -43,7 +45,9 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-
+.router-view{
+  height: 50%;
+}
 </style>
 <style scoped>
 

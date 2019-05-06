@@ -17,11 +17,11 @@ export default {
   },
   watch: {
     $route(to, from) {
-      const index = this._.findIndex(this.pages, { 'name': to.name })
+      const index = this._.findIndex(this.pages, { 'name': this.getMainPath(to.fullPath) })
       this.active = index !== this.active ? index : this.active
     },
     active(newVal, oldVal) {
-      if (newVal !== oldVal && this.$route.name !== this.pages[newVal].name) {
+      if (newVal !== oldVal && this.getMainPath(this.$route.fullPath) !== this.pages[newVal].name) {
         this.$router.push(this.pages[newVal].url)
       }
     }
@@ -68,7 +68,7 @@ export default {
   mounted() {
     var i = 0
     this.pages.some((page, index) => {
-      if (page.name === this.$route.name) {
+      if (page.name === this.getMainPath(this.$route.fullPath)) {
         i = index
         return true
       } else {
@@ -83,6 +83,9 @@ export default {
   methods: {
     change(active) {
       this.title = active
+    },
+    getMainPath(fullPath) {
+      return fullPath.split('/')[1]
     }
   }
 }

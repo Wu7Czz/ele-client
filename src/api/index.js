@@ -8,11 +8,20 @@ export function testApi(query) {
   })
 }
 
+// 查看年级数据
 export function httpGetGradeData(query) {
   return axios({
-    url: '/api/info',
+    url: '/api/fetchgrade',
     method: 'get',
     params: query
+  })
+}
+// 新增年级
+export function httpSaveGrade(data) {
+  return axios({
+    url: '/api/savegrade',
+    method: 'post',
+    data
   })
 }
 export function httpGetClassData(query) {

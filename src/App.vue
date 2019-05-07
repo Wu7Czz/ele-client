@@ -1,10 +1,10 @@
 <template>
   <div id="app">
-    <van-nav-bar
+    <!-- <van-nav-bar
       :title="pages[active].title"
       fixed
-    />
-    <router-view />
+    /> -->
+    <router-view class="app-router-view"></router-view>
     <van-tabbar v-model="active" @change="change">
       <van-tabbar-item v-for="page in pages" :icon="page.icon" :info="page.info" :key="page.title">{{page.title}}</van-tabbar-item>
     </van-tabbar>
@@ -98,8 +98,12 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  padding-top: 50px;
-  padding-bottom: 50px;
+  display: flex;
+  flex-direction: column;
+  .app-router-view{
+    flex: 1;
+    margin-bottom: 50px;
+  }
 }
 #nav {
   padding: 30px;

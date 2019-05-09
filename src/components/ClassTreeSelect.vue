@@ -74,16 +74,16 @@ export default {
   mounted() {
     this.items = this.gradeData.map(grade => {
       const newObject = {}
-      newObject.text = grade.gradeName
-      const classlist = this.classData[grade.gradeId] || []
+      newObject.text = grade.name
+      const classlist = this.classData.map(item => item.gradeId === grade._id)
       if (classlist.length === 0) {
         newObject.children = []
       } else {
-        this.classId = classlist[0].classId
+        this.classId = classlist[0]._id
         newObject.children = classlist.map(i => {
           return {
             text: i.className,
-            id: i.classId,
+            id: i._id,
             data: i
           }
         })

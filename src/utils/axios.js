@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { toast } from 'vant'
 // create an axios instance
 const service = axios.create({
   baseURL: process.env.BASE_API, // api的base_url
@@ -21,7 +22,7 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   response => {
     if (response.status !== 200) {
-      this.$toast.fail('请求失败！')
+      toast.fail('请求失败！')
       return Promise.reject('error')
     } else {
       return response.data
@@ -29,7 +30,7 @@ service.interceptors.response.use(
   },
   error => {
     console.log('err' + error) // for debug
-    this.$toast.fail('请求失败！')
+    toast.fail('请求失败！')
     return Promise.reject(error)
   }
 )

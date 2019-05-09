@@ -76,6 +76,9 @@ export default {
       }
     })
     this.active = i
+    this.$store.dispatch('GetGradeData')
+    this.$store.dispatch('GetClassData')
+    this.$store.dispatch('GetStudentData')
   },
   beforeDestroy() {
 

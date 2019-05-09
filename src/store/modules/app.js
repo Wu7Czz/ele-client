@@ -1,5 +1,5 @@
 // import Cookies from 'js-cookie'
-import { httpGetGradeData, httpGetClassData, httpGetStudentData } from '@/api/index'
+import { httpGetGradeData, httpGetClassData } from '@/api/index'
 const app = {
   state: {
     colors: {
@@ -8,114 +8,8 @@ const app = {
       supper: '#99CC66',
       none: '#777'
     },
-    gradeData: [
-      {
-        'gradeId': 'g2021',
-        'gradeName': '高2021级'
-      },
-      {
-        'gradeId': 'g2020',
-        'gradeName': '高2020级'
-      },
-      {
-        'gradeId': 'g2019',
-        'gradeName': '高2019级'
-      }
-    ],
-    classData: {
-      'g2020': [
-        {
-          'classId': 'afdsf',
-          'className': '01班',
-          'gradeId': 'g2020',
-          'gradeName': '高2020级'
-        }, {
-          'classId': '23434',
-          'className': '02班',
-          'gradeId': 'g2020',
-          'gradeName': '高2020级'
-        }, {
-          'classId': 't34tg4',
-          'className': '03班',
-          'gradeId': 'g2020',
-          'gradeName': '高2020级'
-        }, {
-          'classId': 'vr4',
-          'className': '03班',
-          'gradeId': 'g2020',
-          'gradeName': '高2020级'
-        }, {
-          'classId': 'vtas',
-          'className': '04班',
-          'gradeId': 'g2020',
-          'gradeName': '高2020级'
-        }, {
-          'classId': 'sghfd',
-          'className': '05班',
-          'gradeId': 'g2020',
-          'gradeName': '高2020级'
-        }, {
-          'classId': 'jgsf',
-          'className': '06班',
-          'gradeId': 'g2020',
-          'gradeName': '高2020级'
-        }, {
-          'classId': 'sgfd',
-          'className': '07班',
-          'gradeId': 'g2020',
-          'gradeName': '高2020级'
-        }, {
-          'classId': 't3t43',
-          'className': '08班',
-          'gradeId': 'g2020',
-          'gradeName': '高2020级'
-        }, {
-          'classId': 'tawete',
-          'className': '09班',
-          'gradeId': 'g2020',
-          'gradeName': '高2020级'
-        }
-      ],
-      'g2021': [
-        {
-          'classId': 'fadsf',
-          'className': '01班',
-          'gradeId': 'g2021',
-          'gradeName': '高2021级'
-        }, {
-          'classId': 'fad121sf11',
-          'className': '02班',
-          'gradeId': 'g2021',
-          'gradeName': '高2021级'
-        }, {
-          'classId': '4324',
-          'className': '03班',
-          'gradeId': 'g2021',
-          'gradeName': '高2021级'
-        }, {
-          'classId': '555',
-          'className': '03班',
-          'gradeId': 'g2021',
-          'gradeName': '高2021级'
-        }, {
-          'classId': 'fad121sf',
-          'className': '04班',
-          'gradeId': 'g2021',
-          'gradeName': '高2021级'
-        }, {
-          'classId': 'rterte',
-          'className': '05班',
-          'gradeId': 'g2021',
-          'gradeName': '高2021级'
-        }, {
-          'classId': 'tre',
-          'className': '06班',
-          'gradeId': 'g2021',
-          'gradeName': '高2021级'
-        }
-
-      ]
-    },
+    gradeData: [],
+    classData: [],
     studentData: {
       'fadsf': [
         {
@@ -297,10 +191,11 @@ const app = {
     GetGradeData({ commit }) {
       return new Promise((resolve, reject) => {
         httpGetGradeData().then(response => {
-          const data = response.data
+          const data = response.data || []
           commit('SET_GRADEDATA', data)
           resolve()
         }).catch(error => {
+          commit('SET_GRADEDATA', [])
           reject(error)
         })
       })
@@ -309,25 +204,26 @@ const app = {
     GetClassData({ commit }) {
       return new Promise((resolve, reject) => {
         httpGetClassData().then(response => {
-          const data = response.data
+          const data = response.data || []
           commit('SET_CLASSDATA', data)
           resolve()
         }).catch(error => {
+          commit('SET_CLASSDATA', [])
           reject(error)
         })
       })
     },
     // 获取学生信息
     GetStudentData({ commit }) {
-      return new Promise((resolve, reject) => {
-        httpGetStudentData().then(response => {
-          const data = response.data
-          commit('SET_STUDENTDATA', data)
-          resolve()
-        }).catch(error => {
-          reject(error)
-        })
-      })
+      // return new Promise((resolve, reject) => {
+      //   httpGetStudentData().then(response => {
+      //     const data = response.data
+      //     commit('SET_STUDENTDATA', data)
+      //     resolve()
+      //   }).catch(error => {
+      //     reject(error)
+      //   })
+      // })
     }
   }
 }

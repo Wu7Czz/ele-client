@@ -61,10 +61,10 @@ export default {
           } else {
             this.isFristOpen = false
           }
-          const gradeArray = this.gradeData.map(i => i.gradeName)
-          this.classList = this.classData[this.gradeData[gradeIndex].gradeId] || []
+          const gradeArray = this.gradeData.map(i => i.name)
+          this.classList = this.classData.map(item => item.gradeId === this.gradeData[gradeIndex]._id)
           const classArray = this.classList.map(i => i.className)
-          this.studentList = (this.classList.length !== 0 ? this.studentData[this.classList[classIndex].classId] : []) || []
+          this.studentList = (this.classList.length !== 0 ? this.studentData[this.classList[classIndex]._id] : []) || []
           const studentArray = this.studentList.map(i => i.name)
           this.lastValues = [gradeArray[gradeIndex], classArray[classIndex], studentArray[studentIndex]]
           this.choosedStudent = this._.cloneDeep(this.studentList[studentIndex])
@@ -101,15 +101,15 @@ export default {
       var studentArray = []
       if (this.lastValues[0] !== values[0]) {
         const gradeIndex = picker.getColumnIndex(0)
-        this.classList = this.classData[this.gradeData[gradeIndex].gradeId] || []
+        this.classList = this.classData.map(item => item.gradeId === this.gradeData[gradeIndex]._id)
         const classArray = this.classList.map(i => i.className) || []
-        this.studentList = this.classList.length === 0 ? [] : this.studentData[this.classList[0].classId]
+        this.studentList = this.classList.length === 0 ? [] : this.studentData[this.classList[0]._id]
         studentArray = this.studentList.map(i => i.name) || []
         picker.setColumnValues(1, classArray)
         picker.setColumnValues(2, studentArray)
       } else if (this.lastValues[1] !== values[1]) {
         const classIndex = picker.getColumnIndex(1)
-        this.studentList = this.studentData[this.classList[classIndex].classId] || []
+        this.studentList = this.studentData[this.classList[classIndex]._id] || []
         studentArray = this.studentList.map(i => i.name) || []
         picker.setColumnValues(2, studentArray)
       }

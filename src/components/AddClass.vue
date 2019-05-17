@@ -70,9 +70,11 @@ export default {
     },
     onClickRight() {
       httpSaveClass(this.baseInfo).then(res => {
+        this.baseInfo = {}
         this.$store.dispatch('GetClassData')
         this.$emit('confirm', res.data)
       }, err => {
+        this.baseInfo = {}
         this.$emit('cancel', err)
       })
     },

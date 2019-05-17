@@ -20,7 +20,6 @@
 
 <script>
 import { httpSaveGrade } from '@/api/index'
-import { setTimeout } from 'timers'
 export default {
   name: 'AddStudent',
   props: {
@@ -42,10 +41,11 @@ export default {
     },
     onClickRight() {
       httpSaveGrade(this.baseInfo).then(res => {
-        this.baseInfo = []
         this.$store.dispatch('GetGradeData')
+        this.baseInfo = {}
         this.$emit('confirm', res.data)
       }, err => {
+        this.baseInfo = {}
         this.$emit('cancel', err)
       })
     }

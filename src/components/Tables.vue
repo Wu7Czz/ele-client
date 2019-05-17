@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import Konva from 'Konva'
+import Konva from 'konva'
 import { mapGetters } from 'vuex'
 export default {
   name: 'Table',

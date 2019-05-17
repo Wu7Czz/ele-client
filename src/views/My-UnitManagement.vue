@@ -69,9 +69,9 @@
 <script>
 import { Dialog } from 'vant'
 import { mapGetters } from 'vuex'
-import AddGrade from '@/components/AddGrade'
 // import { httpGetGradeData, httpGetClassData, httpGetStudentData } from '@/api/index'
 import { httpDeleteGrade, httpDeleteClass } from '@/api/index'
+import AddGrade from '@/components/AddGrade'
 import AddClass from '@/components/AddClass'
 import { setTimeout } from 'timers'
 export default {
@@ -163,9 +163,9 @@ export default {
               this.getData()
             }, 500)
             done()
-          }, () => {
+          }, err => {
             done()
-            this.$toast('删除失败！')
+            this.$toast(err.response.data)
           })
         } else {
           done()

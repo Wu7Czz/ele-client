@@ -1,8 +1,5 @@
 <template>
   <div class="home">
-    <van-cell-group>
-      <van-field v-model="currentDate"/>
-    </van-cell-group>
     <van-cell title="今日订餐人次" size="large" value-class="today_num_value" title-class="today_num_title">
       <span>{{today_b}}</span>
       /
@@ -40,7 +37,6 @@
 const Tables = () => import('@/components/Tables')
 // import Tables from '@/components/Tables'
 import { mapGetters } from 'vuex'
-import { parseTime } from '@/utils'
 export default {
   name: 'Home',
   data() {
@@ -50,7 +46,6 @@ export default {
       today_s: 0, // 今日晚饭人次
       msg: 0,
       showFloor: ['1st'],
-      currentDate: parseTime(new Date(), '{y}-{m}-{d}'),
       stageWidth: window.innerWidth,
       tableData: [
         {

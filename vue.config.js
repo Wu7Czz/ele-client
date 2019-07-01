@@ -1,7 +1,7 @@
-// const isProduction = process.env.NODE_ENV === 'production'
+const isProduction = process.env.NODE_ENV === 'production'
 module.exports = {
-  publicPath: process.env.NODE_ENV === 'production'
-    ? 'www.wu7czz.com'
+  publicPath: isProduction
+    ? '/'
     : '/',
 
   outputDir: 'dist',
@@ -36,12 +36,12 @@ module.exports = {
         chunks: 'all'
       }
     }
-    // if (isProduction) {
-    //   config.externals = {
-    //     'vue': 'Vue',
-    //     'vant': 'vant'
-    //   }
-    // }
+    if (isProduction) {
+      config.externals = {
+        'vue': 'Vue',
+        'vant': 'vant'
+      }
+    }
   },
 
   // webpack 链接 API，用于生成和修改 webapck 配置
@@ -98,7 +98,9 @@ module.exports = {
     hotOnly: false,
     proxy: {// 配置跨域
       '/api': {
-        target: 'http://localhost:3030/', // 这里后台的地址模拟的;应该填写你们真实的后台接口
+        target: isProduction
+          ? 'http://47.101.11.217:3030/'
+          : 'http://localhost:3030/',
         ws: true,
         changOrigin: true, // 允许跨域
         pathRewrite: {

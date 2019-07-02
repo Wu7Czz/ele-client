@@ -98,9 +98,7 @@ module.exports = {
     hotOnly: false,
     proxy: {// 配置跨域
       '/api': {
-        target: isProduction
-          ? 'http://47.101.11.217:3030/'
-          : 'http://localhost:3030/',
+        target: 'http://127.0.0.1:3030/',
         ws: true,
         changOrigin: true, // 允许跨域
         pathRewrite: {
